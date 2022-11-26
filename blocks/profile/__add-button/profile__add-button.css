@@ -1,5 +1,4 @@
 .profile__add-button {
-  cursor: pointer;
   background-color: #000;
   background-image: url(../../../images/plus.svg);
   background-repeat: no-repeat;
@@ -8,4 +7,5 @@
   box-sizing: border-box;
   height: 50px;
   width: 150px;
+  padding: 0;
 }

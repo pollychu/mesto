@@ -1,5 +1,4 @@
 .profile__edit-button {
-  cursor: pointer;
   background-color: #000;
   background-image: url(../../../images/pen.svg);
   background-repeat: no-repeat;
@@ -8,4 +7,5 @@
   box-sizing: border-box;
   height: 24px;
   width: 24px;
+  padding: 0;
 }

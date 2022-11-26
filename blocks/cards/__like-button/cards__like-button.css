@@ -1,0 +1,9 @@
+.cards__like-button {
+    background-color: #fff;
+    background-image: url(../../../images/heart.svg);
+    border: 0;
+    height: 19px;
+    width: 22px;
+    padding: 0;
+    margin: 0 5px 0 0;
+}
