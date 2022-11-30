@@ -1,9 +1,18 @@
 .cards__like-button {
-    background-color: #fff;
+    background-color: transparent;
     background-image: url(../../../images/heart.svg);
+    background-repeat: no-repeat;
+    background-position: center;
     border: 0;
-    height: 19px;
-    width: 22px;
+    min-height: 19px;
+    min-width: 22px;
     padding: 0;
-    margin: 0 5px 0 0;
+    margin: 0;
+    cursor: pointer;
+    transition: opacity 0.5s ease;
 }
+
+.cards__like-button:hover {
+  opacity: 0.5;
+}
+

@@ -5,7 +5,21 @@
   background-position: center;
   border: 1px solid #fff;
   box-sizing: border-box;
-  height: 50px;
-  width: 150px;
+  min-height: 50px;
+  min-width: 150px;
   padding: 0;
+  cursor: pointer;
+  transition: opacity 0.5s ease;
+}
+
+.profile__add-button:hover {
+  opacity: 0.6;
+}
+
+@media screen and (max-width: 767.98px) {
+  .profile__add-button {
+    background-size: 16px;
+    gap: 36px;
+    min-width: 282px;
+  }
 }

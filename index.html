@@ -6,10 +6,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <link rel="stylesheet" href="./pages/index.css">
   <meta name="description" content="Проект 4 Полина Чурикова">
-  <meta name="keywords" content="html, css">
+  <meta name="keywords" content="html, css, javascript">
   <meta name="author" content="Полина Чурикова">
   <title>Mesto</title>
 </head>
+
+<div class="popup">
+  <div class="popup__container">
+    <h2 class="popup__heading">Редактировать профиль</h2>
+    <button class="popup__close-button" type="button"></button>
+    <form class="popup__form">
+      <input type="text" class="popup__input popup__input_type_credentials" id="credentials" name="credentials">
+      <input type="text" class="popup__input popup__input_type_description" id="description" name="description">
+      <button class="popup__save-button" type="submit">Сохранить</button>
+    </form>
+  </div>
+</div>
 
 <body class="page">
   <!-- цвет задан всей странице, но контент, вкл хедер и футер надо ограничить по max-width-->
@@ -22,13 +34,15 @@
     <main>
 
       <section class="profile">
-        <img class="profile__avatar" src="./images/jak-iv-kusto.jpg" alt="портрет Жак-Ива Кусто - он в очках, красной шапке на фоне моря">
-        <div class="profile__info">
-          <div class="profile__credentials-container">
-            <h1 class="profile__credentials">Жак-Ив Кусто</h1>
-            <button class="profile__edit-button" type="button"></button>
+        <div class="profile__avatar-info">
+          <img class="profile__avatar" src="./images/jak-iv-kusto.jpg" alt="портрет Жак-Ива Кусто - он в очках, красной шапке на фоне моря">
+          <div class="profile__info">
+            <div class="profile__credentials-button">
+              <h1 class="profile__credentials">Жак-Ив Кусто</h1>
+              <button class="profile__edit-button" type="button"></button>
+            </div>
+            <p class="profile__description">Исследователь океана</p>
           </div>
-          <p class="profile__description">Исследователь океана</p>
         </div>
         <button class="profile__add-button" type="button"></button>
       </section>
@@ -80,7 +94,13 @@
 
     </main>
 
+    <footer class="footer">
+      <p class="footer__copyright">&copy; 2022 Mesto Russia</p>
+    </footer>
+
   </div>
+
+<script src="./scripts/index.js"></script>
 </body>
 
 

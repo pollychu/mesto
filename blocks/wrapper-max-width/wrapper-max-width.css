@@ -1,4 +1,17 @@
 .wrapper-max-width {
   max-width: 880px;
+  min-width: 288px;
   margin: 0 auto;
+}
+
+@media screen and (max-width: 899.98px) {
+  .wrapper-max-width {
+    max-width: 740px;
+  }
+}
+
+@media screen and (max-width: 767.98px) {
+  .wrapper-max-width {
+    max-width: 320px;
+  }
 }
