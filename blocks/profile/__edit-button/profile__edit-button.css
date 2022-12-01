@@ -3,6 +3,7 @@
   background-image: url(../../../images/pen.svg);
   background-repeat: no-repeat;
   background-position: center;
+  background-size: 10px;
   border: 1px solid #fff;
   box-sizing: border-box;
   min-height: 24px;
@@ -20,5 +21,9 @@
   .profile__edit-button {
     min-height: 18px;
     min-width: 18px;
+    background-size: 7.5px;
+    position: absolute;
+    bottom: calc(32px - 26px);
+    left: calc(189px + 10px);
   }
 }

@@ -1,4 +1,4 @@
-.cards {
+.gallery {
   display: grid;
   grid-template-columns: repeat(auto-fill, 282px);
   column-gap: 17px;
@@ -9,7 +9,7 @@
 }
 
 @media screen and (max-width: 767.98px) {
-  .cards{
+  .gallery {
     padding: 36px 0 0;
   }
 }
