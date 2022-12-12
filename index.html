@@ -35,48 +35,6 @@
       </section>
 
       <section class="gallery">
-          <article class="card">
-            <img class="card__picture" src="./images/karachaevsk.jpg" alt="фото древней церкви на фоне зеленых гор">
-            <div class="card__info">
-              <h2 class="card__title">Карачаевск</h2>
-              <button class="card__like-button" type="button"></button>
-            </div>
-          </article>
-          <article class="card">
-            <img class="card__picture" src="./images/elbrus.jpg" alt="фото гор на фоне степи в дымке оранжевого заката">
-            <div class="card__info">
-              <h2 class="card__title">Гора Эльбрус</h2>
-              <button class="card__like-button" type="button"></button>
-            </div>
-          </article>
-          <article class="card">
-            <img class="card__picture" src="./images/dombay.jpg" alt="фото заснеженной вершины среди осенних елок">
-            <div class="card__info">
-              <h2 class="card__title">Домбай</h2>
-              <button class="card__like-button" type="button"></button>
-            </div>
-          </article>
-          <article class="card">
-            <img class="card__picture" src="./images/elbrus.jpg" alt="фото гор на фоне степи в дымке оранжевого заката">
-            <div class="card__info">
-              <h2 class="card__title">Гора Эльбрус</h2>
-              <button class="card__like-button" type="button"></button>
-            </div>
-          </article>
-          <article class="card">
-            <img class="card__picture" src="./images/dombay.jpg" alt="фото заснеженной вершины среди осенних елок">
-            <div class="card__info">
-              <h2 class="card__title">Домбай</h2>
-              <button class="card__like-button" type="button"></button>
-            </div>
-          </article>
-          <article class="card">
-            <img class="card__picture" src="./images/karachaevsk.jpg" alt="фото древней церкви на фоне зеленых гор">
-            <div class="card__info">
-              <h2 class="card__title">Карачаево-Черкесия</h2>
-              <button class="card__like-button" type="button"></button>
-            </div>
-          </article>
       </section>
     </main>
 
@@ -87,8 +45,8 @@
   <!-- wrapper-max-width закрываю -->
   </div>
 
-  <!-- popup block -->
-  <div class="popup">
+  <!-- popup-edit block -->
+  <div class="popup popup_purpose_edit-profile">
     <div class="popup__container">
       <h2 class="popup__heading">Редактировать профиль</h2>
       <button class="popup__close-button" type="button"></button>
@@ -99,6 +57,40 @@
       </form>
     </div>
   </div>
+
+    <!-- popup-add block -->
+    <div class="popup popup_purpose_add-card">
+      <div class="popup__container">
+        <h2 class="popup__heading">Новое место</h2>
+        <button class="popup__close-button" type="button"></button>
+        <form class="popup__form">
+          <input type="text" class="popup__input popup__input_type_title" id="title" name="title" placeholder="Название">
+          <input type="text" class="popup__input popup__input_type_link" id="link" name="link" placeholder="Ссылка на картинку">
+          <button class="popup__save-button" type="submit">Создать</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- popup show-picture -->
+    <div class="popup popup_purpose_show-picture">
+      <figure class="popup__picture-container">
+        <button class="popup__close-button popup__close-button_place_picture" type="button"></button>
+        <img class="popup__picture" src="" alt="">
+        <figcaption class="popup__picture-caption"></figcaption>
+      </figure>
+    </div>
+
+    <!-- template card -->
+    <template id="cards-template">
+      <article class="card">
+        <img class="card__picture" src="" alt="">
+        <button class="card__delete-button" type="button"></button>
+        <div class="card__info">
+          <h2 class="card__title"></h2>
+          <button class="card__like-button" type="button"></button>
+        </div>
+      </article>
+    </template>
 
 <script defer src="./scripts/index.js"></script>
 </body>
