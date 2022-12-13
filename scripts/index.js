@@ -39,6 +39,7 @@ const cardAddPopup = document.querySelector('.popup_purpose_add-card');
 const cardAddOpenButton = document.querySelector('.profile__add-button');
 const cardAddCloseButton = cardAddPopup.querySelector('.popup__close-button');
 const cardAddForm = cardAddPopup.querySelector('.popup__form');
+const cardsContainer = document.querySelector('.gallery');
 const titleInput = cardAddPopup.querySelector('.popup__input_type_title');
 const linkInput = cardAddPopup.querySelector('.popup__input_type_link');
 
@@ -47,6 +48,8 @@ const pictureShowPopupCloseButton = document.querySelector('.popup__close-button
 const pictureShowPopupCaption = document.querySelector('.popup__picture-caption');
 const picture = document.querySelector('.popup__picture');
 
+const closeButtons = document.querySelectorAll('.popup__close-button');
+
 // блок с общим функционалом
 const openPopup = popup => {
   popup.classList.add('popup_opened');
@@ -54,6 +57,9 @@ const openPopup = popup => {
 const closePopup = popup => {
   popup.classList.remove('popup_opened');
 }
+closeButtons.forEach((button) => {
+  button.addEventListener('click', () => closePopup(button.parentElement.parentElement));
+});
 
 // блок с присваиванием значений в попах-полях
 const defoltEditProfilePopupValues = () => {
@@ -66,7 +72,7 @@ const defoltCardAddPopupValues = () => {
 }
 
 // изменение описания профиля
-function profileEditFormSubmitHandler (evt) {
+const profileEditFormSubmitHandler = (evt) => {
   evt.preventDefault();
   credentialsOutput.textContent = credentialsInput.value;
   descriptionOutput.textContent = descriptionInput.value;
@@ -75,56 +81,46 @@ function profileEditFormSubmitHandler (evt) {
 
 // обработчики событий для трех форм
 profileEditPopupOpenButton.addEventListener('click', () => openPopup(profileEditPopup));
-profileEditPopupCloseButton.addEventListener('click', () => closePopup(profileEditPopup));
-profileEditForm.addEventListener('submit', profileEditFormSubmitHandler);
 profileEditPopupOpenButton.addEventListener('click', defoltEditProfilePopupValues);
-
+profileEditForm.addEventListener('submit', profileEditFormSubmitHandler);
 cardAddOpenButton.addEventListener('click', () => openPopup(cardAddPopup));
-cardAddCloseButton.addEventListener('click', () => closePopup(cardAddPopup));
 cardAddOpenButton.addEventListener('click', defoltCardAddPopupValues);
 
-pictureShowPopupCloseButton.addEventListener('click',() => closePopup(pictureShowPopup));
-
 // функционал создания, удаления, лайка карточки и открытия картинки
-function addCard(title, link) {
+const createCard = (title, link) => {
   const cardsTemplate = document.querySelector('#cards-template').content;
-  const cardsContainer = document.querySelector('.gallery');
   const cardElement = cardsTemplate.querySelector('.card').cloneNode(true);
   const cardLikeButton = cardElement.querySelector('.card__like-button');
   const cardPicture = cardElement.querySelector('.card__picture');
   const cardDeleteButton = cardElement.querySelector('.card__delete-button');
   const cardTitle = cardElement.querySelector('.card__title');
 
-  cardLikeButton.addEventListener('click', function () {
-    cardLikeButton.classList.toggle('card__like-button_active');
-  });
-  cardDeleteButton.addEventListener('click', function() {
-    cardElement.remove();
-  });
-
-  cardPicture.src = link;
-  cardPicture.alt = title;
-  cardTitle.textContent = title;
-  cardsContainer.prepend(cardElement);
+  cardLikeButton.addEventListener('click', () => cardLikeButton.classList.toggle('card__like-button_active'));
+  cardDeleteButton.addEventListener('click', () => cardElement.remove());
   cardPicture.addEventListener('click', () => openPopup(pictureShowPopup));
   cardPicture.addEventListener('click', function() {
     pictureShowPopupCaption.textContent = cardTitle.textContent;
     picture.src = cardPicture.src;
     picture.alt = cardTitle.textContent;
   });
+  cardPicture.src = link;
+  cardPicture.alt = title;
+  cardTitle.textContent = title;
+  return(cardElement);
 }
 
 // карточки при рендеренге страницы
 initialCards.forEach((el) => {
-  addCard(el.title, el.link);
+  cardsContainer.prepend(createCard(el.title, el.link));
 });
 
 // карточки от пользователя
-function cardAddFormSubmitHandler (evt) {
+const cardAddFormSubmitHandler = (evt) => {
   evt.preventDefault();
   if (titleInput.value !== '' && linkInput.value !== '') {
-    addCard(titleInput.value, linkInput.value);
+    cardsContainer.prepend(createCard(titleInput.value, linkInput.value));
   }
   closePopup(cardAddPopup);
 }
 cardAddForm.addEventListener('submit', cardAddFormSubmitHandler);
+
