@@ -42,10 +42,10 @@ const resetCardAddPopupValues = () => {
   cardAddForm.reset();
   openPopup(cardAddPopup);
 }
-const setPictureShowPopupValues = (image, title) => {
-  pictureShowPopupCaption.textContent = title.textContent;
-  picture.src = image.src;
-  picture.alt = title.textContent;
+const setPictureShowPopupValues = (cardData) => {
+  pictureShowPopupCaption.textContent = cardData.title;
+  picture.src = cardData.link;
+  picture.alt = cardData.title;
   openPopup(pictureShowPopup);
 }
 
@@ -66,7 +66,7 @@ popupCloseButtons.forEach((button) => {
 });
 
 // функционал создания, удаления, лайка карточки
-const createCard = (title, link) => {
+const createCard = (cardData) => {
   const cardElement = cardsTemplate.querySelector('.card').cloneNode(true);
   const cardLikeButton = cardElement.querySelector('.card__like-button');
   const cardPicture = cardElement.querySelector('.card__picture');
@@ -75,23 +75,26 @@ const createCard = (title, link) => {
 
   cardLikeButton.addEventListener('click', () => cardLikeButton.classList.toggle('card__like-button_active'));
   cardDeleteButton.addEventListener('click', () => cardElement.remove());
-  cardPicture.addEventListener('click', () => setPictureShowPopupValues (cardPicture, cardTitle));
-  cardPicture.src = link;
-  cardPicture.alt = title;
-  cardTitle.textContent = title;
+  cardPicture.addEventListener('click', () => setPictureShowPopupValues(cardData));
+  cardPicture.src = cardData.link;
+  cardPicture.alt = cardData.title;
+  cardTitle.textContent = cardData.title;
   return(cardElement);
 }
 
 // карточки при рендеренге страницы
 initialCards.forEach((el) => {
-  cardsContainer.prepend(createCard(el.title, el.link));
+  cardsContainer.prepend(createCard(el));
 });
 
 // карточки от пользователя
 const handleSubmitCardAddForm = (evt) => {
+  const cardData = {
+    title: titleInput.value,
+    link: linkInput.value
+  };
   evt.preventDefault();
-  cardsContainer.prepend(createCard(titleInput.value, linkInput.value));
+  cardsContainer.prepend(createCard(cardData));
   closePopup(cardAddPopup);
 }
 cardAddForm.addEventListener('submit', handleSubmitCardAddForm);
-
