@@ -24,6 +24,6 @@
     background-size: 7.5px;
     position: absolute;
     bottom: calc(32px - 26px);
-    left: calc(189px + 10px);
+    left: calc(100% + 10px);
   }
 }

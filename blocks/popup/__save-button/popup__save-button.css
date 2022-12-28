@@ -8,6 +8,7 @@
   font-size: 18px;
   line-height: calc(22/18);
   padding: 0;
+  margin: 18px 0 0;
   cursor: pointer;
   transition: opacity 0.5s ease;
 }
@@ -21,6 +22,6 @@
     font-size: 14px;
     line-height: calc(17/14);
     min-height: 46px;
+    margin: 15px 0 0;
   }
 }
-
