@@ -21,29 +21,24 @@ const inputsFromAddForm =  Array.from(cardAddForm.querySelectorAll('.popup__inpu
 
 const pictureShowPopup = document.querySelector('.popup_purpose_show-picture');
 const pictureShowPopupCloseButton = document.querySelector('.popup__close-button_place_picture');
-
 const pictureShowPopupCaption = document.querySelector('.popup__picture-caption');
 const picture = document.querySelector('.popup__picture');
 
 const popupCloseButtons = document.querySelectorAll('.popup__close-button');
-const inputsFromPopups =  Array.from(document.querySelectorAll('.popup__input'));
 const popups = Array.from(document.querySelectorAll('.popup'));
 
 // блок с общим функционалом
 const openPopup = popup => {
   popup.classList.add('popup_opened');
-  inputsFromPopups.forEach((input) => {
-    hideInputError(input.closest('.popup'), input);
   document.addEventListener('keydown', closePopupWithEsc);
-  });
 }
 const closePopup = popup => {
   popup.classList.remove('popup_opened');
   document.removeEventListener('keydown', closePopupWithEsc);
 }
 const closePopupWithEsc = (e) => {
-  const popupOpened = document.querySelector('.popup_opened');
   if(e.key=='Escape'||e.key=='Esc'){
+    const popupOpened = document.querySelector('.popup_opened');
     e.preventDefault();
     closePopup(popupOpened);
   }
@@ -59,14 +54,19 @@ const closePopupOnBackgroundClick = ({ currentTarget, target }) => {
 const setDefoltEditProfilePopupValues = () => {
   credentialsInput.value = credentialsOutput.textContent;
   descriptionInput.value = descriptionOutput.textContent;
-  toggleButtonState(inputsFromEditForm, profileEditPopupSaveButton);
+  inputsFromEditForm.forEach((input) => {
+    hideInputError(input.closest('.popup'), input, validationConfig)});
+  toggleButtonState(inputsFromEditForm, profileEditPopupSaveButton, validationConfig);
   openPopup(profileEditPopup);
 }
 const resetCardAddPopupValues = () => {
   cardAddForm.reset();
+  inputsFromAddForm.forEach((input) => {
+    hideInputError(input.closest('.popup'), input, validationConfig)});
   openPopup(cardAddPopup);
-  toggleButtonState(inputsFromAddForm, cardAddSaveButton);
+  toggleButtonState(inputsFromAddForm, cardAddSaveButton, validationConfig);
 }
+
 const setPictureShowPopupValues = (cardData) => {
   pictureShowPopupCaption.textContent = cardData.title;
   picture.src = cardData.link;
