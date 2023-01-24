@@ -19,7 +19,7 @@ class FormValidator {
     errorElement.textContent = errorMessage;
     errorElement.classList.add(this._errorClass);
   };
-  hideInputError = (inputElement) => {
+  _hideInputError = (inputElement) => {
     const errorElement = this._formElementSelector.querySelector(`.${inputElement.id}-error`);
     inputElement.classList.remove(this._inputErrorClass);
     errorElement.classList.remove(this._errorClass);
@@ -30,7 +30,7 @@ class FormValidator {
     if (!inputElement.validity.valid) {
       this._showInputError(inputElement, inputElement.validationMessage);
     } else {
-      this.hideInputError(inputElement);
+      this._hideInputError(inputElement);
     }
   };
   _hasInvalidInput () {
@@ -50,8 +50,7 @@ class FormValidator {
     }
   }
 
-// отдельная публичная функция для установки дефолтного состояния кнопки
-  disableSubmitButton () {
+  _disableSubmitButton () {
     this._submitButton.classList.add(this._inactiveButtonClass);
     this._submitButton.disabled = true;
   }
@@ -64,6 +63,14 @@ class FormValidator {
       });
     });
   }
+
+  resetFormCondition () {
+    this._inputList.forEach((input) => {
+      this._hideInputError(input);
+      this._disableSubmitButton();
+    });
+  }
+
 
   enableValidation () {
     this._setEventListeners();

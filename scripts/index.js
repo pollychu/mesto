@@ -10,7 +10,6 @@ const credentialsInput = profileEditForm.querySelector('.popup__input_type_crede
 const descriptionInput = profileEditForm.querySelector('.popup__input_type_description');
 const credentialsOutput = document.querySelector('.profile__credentials');
 const descriptionOutput = document.querySelector('.profile__description');
-const inputsFromEditForm = Array.from(profileEditForm.querySelectorAll('.popup__input'));
 
 const cardAddPopup = document.querySelector('.popup_purpose_add-card');
 const cardAddOpenButton = document.querySelector('.profile__add-button');
@@ -18,7 +17,6 @@ const cardAddForm = cardAddPopup.querySelector('.popup__form');
 const cardsContainer = document.querySelector('.gallery');
 const titleInput = cardAddPopup.querySelector('.popup__input_type_title');
 const linkInput = cardAddPopup.querySelector('.popup__input_type_link');
-const inputsFromAddForm =  Array.from(cardAddForm.querySelectorAll('.popup__input'));
 
 const pictureShowPopup = document.querySelector('.popup_purpose_show-picture');
 const pictureShowPopupCaption = document.querySelector('.popup__picture-caption');
@@ -50,28 +48,22 @@ const closePopupOnBackgroundClick = ({ currentTarget, target }) => {
   }
 }
 
-// блок с присваиванием значений в попах-полях
-const setPictureShowPopupValues = (cardInfo) => {
+// блок с присваиванием значений в попах-полях и их открытие
+const openImagePopup = (cardInfo) => {
   pictureShowPopupCaption.textContent = cardInfo.title;
   picture.src = cardInfo.link;
   picture.alt = cardInfo.title;
   openPopup(pictureShowPopup);
 }
-const setDefoltEditProfilePopupValues = () => {
+const openEditProfilePopup = () => {
   credentialsInput.value = credentialsOutput.textContent;
   descriptionInput.value = descriptionOutput.textContent;
-  inputsFromEditForm.forEach((input) => {
-    profileEditFormfValidator.hideInputError(input);
-    profileEditFormfValidator.disableSubmitButton();
-  });
+  profileEditFormfValidator.resetFormCondition();
   openPopup(profileEditPopup);
 }
-const resetCardAddPopupValues = () => {
+const openAddCardPopup = () => {
   cardAddForm.reset();
-  inputsFromAddForm.forEach((input) => {
-    cardAddPopupFormValidator.hideInputError(input);
-    cardAddPopupFormValidator.disableSubmitButton();;
-  });
+  cardAddPopupFormValidator.resetFormCondition();
   openPopup(cardAddPopup);
 }
 
@@ -84,8 +76,8 @@ const handleSubmitProfileEditForm  = (evt) => {
 }
 
 // обработчики событий для трех форм
-profileEditPopupOpenButton.addEventListener('click', setDefoltEditProfilePopupValues);
-cardAddOpenButton.addEventListener('click', resetCardAddPopupValues);
+profileEditPopupOpenButton.addEventListener('click', openEditProfilePopup);
+cardAddOpenButton.addEventListener('click', openAddCardPopup);
 profileEditForm.addEventListener('submit', handleSubmitProfileEditForm);
 popupCloseButtons.forEach((button) => {
   button.addEventListener('click', () => closePopup(button.closest('.popup')));
@@ -95,18 +87,27 @@ popups.forEach((popup) => {
 });
 
 // для каждой проверяемой формы экземпляр класса FormValidator.
-const profileEditFormfValidator = new FormValidator(validationConfig, profileEditForm);
+const createFormValidator = (form) => {
+  const newFormValidator = new FormValidator(validationConfig, form);
+  return newFormValidator;
+}
+const profileEditFormfValidator = createFormValidator(profileEditForm);
 profileEditFormfValidator.enableValidation();
-const cardAddPopupFormValidator = new FormValidator(validationConfig, cardAddForm);
+const cardAddPopupFormValidator = createFormValidator(cardAddForm);
 cardAddPopupFormValidator.enableValidation();
 
-  // добавление карточки
+  // добавление и создание карточки карточки
+const createCard = (card) => {
+  const newCard = new Card(card, '#cards-template', openImagePopup);
+  return newCard;
+}
 const renderCard = (card) => {
   cardsContainer.prepend(card);
 }
+
 // карточки при загрузке страницы
 initialCardsList.forEach((initialCard) => {
-  const card = new Card(initialCard, '#cards-template', pictureShowPopup, closePopup, setPictureShowPopupValues);
+  const card = createCard(initialCard);
   const defaultCard = card.generateCard();
   renderCard(defaultCard);
 });
@@ -117,7 +118,7 @@ const handleSubmitCardAddForm = (evt) => {
     title: titleInput.value,
     link: linkInput.value
   };
-  const card = new Card(userCardData, '#cards-template', pictureShowPopup, closePopup, setPictureShowPopupValues);
+  const card = createCard(userCardData);
   const userCard = card.generateCard();
   evt.preventDefault();
   renderCard(userCard);

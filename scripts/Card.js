@@ -2,14 +2,12 @@ export { Card };
 
 // class Card
 class Card {
-  constructor(cardData, templateSelector, pictureShowPopup, closePopup, setPictureShowPopupValues) {
+  constructor(cardData, templateSelector, openImagePopup) {
     this._cardData = cardData;
     this._title = cardData.title;
     this._link = cardData.link;
     this._templateSelector = templateSelector;
-    this._pictureShowPopup = pictureShowPopup;
-    this._closePopup = closePopup;
-    this._setPictureShowPopupValues = setPictureShowPopupValues;
+    this._openImagePopup = openImagePopup;
     this._cardData = cardData;
   }
 
@@ -43,11 +41,6 @@ class Card {
   _handleDeleteCard() {
     this._element.remove();
   }
-  _handleClosePopup() {
-    picture.src = '';
-    picture.alt = '';
-    this._closePopup(this._pictureShowPopup);
-  }
 
   _setEventListeners() {
     this._likeButton.addEventListener('click', () => {
@@ -57,7 +50,7 @@ class Card {
       this._handleDeleteCard();
     });
     this._picture.addEventListener('click', () => {
-      this._setPictureShowPopupValues(this._cardData);
+      this._openImagePopup(this._cardData);
     });
   }
 }
