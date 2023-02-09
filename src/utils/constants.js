@@ -1,6 +1,4 @@
-export { initialCardsList, validationConfig };
-
-const initialCardsList = [
+export const initialPictures = [
   {
     title: 'Америка',
     link: 'https://images.unsplash.com/photo-1643132711926-45276ac9d3e1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80'
@@ -27,7 +25,7 @@ const initialCardsList = [
   }
 ];
 
-const validationConfig = {
+export const validationConfig = {
   formSelector: ".popup__form",
   inputSelector: ".popup__input",
   submitButtonSelector: ".popup__save-button",
@@ -35,3 +33,15 @@ const validationConfig = {
   inputErrorClass: "popup__input_incorrect",
   errorClass: "popup__input-error_active",
 };
+
+export const pictureShowPopup = document.querySelector('.popup_purpose_show-picture');
+export const pictureShowPopupCaption = document.querySelector('.popup__picture-caption');
+export const picture = document.querySelector('.popup__picture');
+export const profileEditPopupOpenButton = document.querySelector('.profile__edit-button');
+export const cardAddOpenButton = document.querySelector('.profile__add-button');
+const cardAddPopup = document.querySelector('.popup_purpose_add-card');
+export const cardAddForm = cardAddPopup.querySelector('.popup__form');
+const profileEditPopup = document.querySelector('.popup_purpose_edit-profile');
+export const profileEditForm = profileEditPopup.querySelector('.popup__form');
+export const credentialsInput = profileEditForm.querySelector('.popup__input_type_credentials');
+export const descriptionInput = profileEditForm.querySelector('.popup__input_type_description');

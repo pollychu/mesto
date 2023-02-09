@@ -1,22 +1,19 @@
-export { Card };
-
-// class Card
-class Card {
-  constructor(cardData, templateSelector, openImagePopup) {
+export default class Card {
+  constructor({ cardData }, handleCardClick, templateSelector) {
     this._cardData = cardData;
     this._title = cardData.title;
     this._link = cardData.link;
     this._templateSelector = templateSelector;
-    this._openImagePopup = openImagePopup;
-    this._cardData = cardData;
+    this._handleCardClick = handleCardClick;
   }
 
   _getTemplate() {
     const cardElement = document
-    .querySelector(this._templateSelector)
-    .content
-    .querySelector('.card')
-    .cloneNode(true);
+      .querySelector(this._templateSelector)
+      .content
+      .querySelector('.card')
+      .cloneNode(true);
+
     return cardElement;
   }
 
@@ -50,7 +47,7 @@ class Card {
       this._handleDeleteCard();
     });
     this._picture.addEventListener('click', () => {
-      this._openImagePopup(this._cardData);
+      this._handleCardClick(this._cardData);
     });
   }
 }

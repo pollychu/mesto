@@ -1,6 +1,4 @@
-export { FormValidator };
-
-class FormValidator {
+export default class FormValidator {
   // принимает в конструктор объект настроек с селекторами и классами формы;
   // принимает вторым параметром элемент той формы, которая валидируется;
   constructor(config, formElementSelector) {
@@ -70,7 +68,6 @@ class FormValidator {
       this._disableSubmitButton();
     });
   }
-
 
   enableValidation () {
     this._setEventListeners();

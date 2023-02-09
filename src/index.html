@@ -4,7 +4,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <link rel="stylesheet" href="./pages/index.css">
   <meta name="description" content="Проект 4 Полина Чурикова">
   <meta name="keywords" content="html, css, javascript">
   <meta name="author" content="Полина Чурикова">
@@ -22,7 +21,7 @@
     <main>
       <section class="profile">
         <div class="profile__avatar-info">
-          <img class="profile__avatar" src="./images/jak-iv-kusto.jpg" alt="портрет Жак-Ива Кусто - он в очках, красной шапке на фоне моря">
+          <img class="profile__avatar" src="<%=require('./images/jak-iv-kusto.jpg')%>" alt="портрет Жак-Ива Кусто - он в очках, красной шапке на фоне моря">
           <div class="profile__info">
             <div class="profile__credentials-button">
               <h1 class="profile__credentials">Жак-Ив Кусто</h1>
@@ -105,7 +104,7 @@
       </article>
     </template>
 
-<script type="module" src="./scripts/index.js"></script>
+<script type="module" src="./pages/index.js"></script>
 
 </body>
 </html>
