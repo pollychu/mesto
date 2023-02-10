@@ -14,14 +14,17 @@ import {
   cardAddForm,
   cardAddOpenButton
 } from '../utils/constants.js';
-import './index.css';
+import './index.css'; 
+
+// подготовлю сразу инстанс класса для открытия попапа с картинкой
+const popupWithImage = new PopupWithImage('.popup_purpose_show-picture');
+popupWithImage.setEventListeners();
+
+const handleCardClick = (data) => {
+  popupWithImage.open(data);
+}
 
 // отрисовка дефолтных карточек
-const handleCardClick = (data) => {
-  const popupWithImage = new PopupWithImage('.popup_purpose_show-picture', data);
-  popupWithImage.open();
-  popupWithImage.setEventListeners();
-}
 const initialCardsList = new Section({
   items: initialPictures,
   renderer: (item) => {
@@ -47,20 +50,20 @@ const userInfo = new UserInfo({
   userDescriptionSelector: '.profile__description'
 });
 
-const editPopup = new PopupWithForm(
+const popupEditProfile = new PopupWithForm(
   '.popup_purpose_edit-profile', {
   handleFormSubmit: (inputsData) => {
     userInfo.setUserInfo(inputsData);
-    editPopup.close();
+    popupEditProfile.close();
     }
   }
 );
 // этот метод помимо прочего при сабмите формы активирует
 // handleFormSubmit с this._getInputValues в аргументе
-editPopup.setEventListeners();
+popupEditProfile.setEventListeners();
 
 const hadleOpenEditPopup = () => {
-  editPopup.open();
+  popupEditProfile.open();
   profileEditFormfValidator.resetFormCondition();
   const currentData = userInfo.getUserInfo();
   credentialsInput.value = currentData.credentials;
@@ -71,7 +74,7 @@ profileEditPopupOpenButton.addEventListener('click', () => {
 });
 
 // блок для добавления карточек от юзера
-const addPopup = new PopupWithForm(
+const popupAddCard = new PopupWithForm(
   '.popup_purpose_add-card', {
 
   handleFormSubmit: (inputsData) => {
@@ -88,14 +91,14 @@ const addPopup = new PopupWithForm(
       }, '.gallery');
 
     userCard.renderItems();
-    addPopup.close();
+    popupAddCard.close();
     }
   }
 );
-addPopup.setEventListeners();
+popupAddCard.setEventListeners();
 
 const hadleOpenCardAddPopup = () => {
-  addPopup.open();
+  popupAddCard.open();
   cardAddPopupFormValidator.resetFormCondition();
 }
 cardAddOpenButton.addEventListener('click', () => {

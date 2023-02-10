@@ -35,8 +35,6 @@ export const validationConfig = {
 };
 
 export const pictureShowPopup = document.querySelector('.popup_purpose_show-picture');
-export const pictureShowPopupCaption = document.querySelector('.popup__picture-caption');
-export const picture = document.querySelector('.popup__picture');
 export const profileEditPopupOpenButton = document.querySelector('.profile__edit-button');
 export const cardAddOpenButton = document.querySelector('.profile__add-button');
 const cardAddPopup = document.querySelector('.popup_purpose_add-card');
