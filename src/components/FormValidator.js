@@ -62,6 +62,14 @@ export default class FormValidator {
     });
   }
 
+  changeButtonOnSaveChanges() {
+    this._submitButton.textContent = this._submitButton.dataset.buttonLoadingText;
+  }
+
+  setDefaultSubmitButtonValue() {
+    this._submitButton.textContent = this._submitButton.dataset.buttonText;
+  }
+
   resetFormCondition () {
     this._inputList.forEach((input) => {
       this._hideInputError(input);
