@@ -23,6 +23,8 @@ import './index.css';
 
 // cоздаю инстанс класса апи для работы с сервером
 const api = new Api(apiConfig);
+// позже сюда запишется userId
+let userId;
 
 // запуск валидации форм
 const createFormValidator = (form) => {
@@ -36,48 +38,113 @@ cardAddPopupFormValidator.enableValidation();
 const avatarChangePopupValidator = createFormValidator(avatarChangeForm);
 avatarChangePopupValidator.enableValidation();
 
-// создание нужных инстансов и колбэков для работы с карточками и профилем
+
+// инстанс юзеринфо для работы с данными юзера
 const userInfo = new UserInfo({
   userCredentialsSelector: '.profile__credentials',
   userDescriptionSelector: '.profile__description',
   avatarSelector: '.profile__avatar'
 });
 
+// инстанс класса, ответственного за рендеринг карточек
+// - рендерер для отрисовки всех карточек с сервера при загрузке стр
+const cardList = new Section({
+  renderer: (item) => {
+    const cardElement = createNewCard({ cardData: item });
+    cardList.addItems(cardElement);
+  }
+}, '.gallery');
+
+// создаю инстансы нужных попапов и колбэки с ними
 const popupWithImage = new PopupWithImage('.popup_purpose_show-picture');
 popupWithImage.setEventListeners();
 const handleCardClick = (data) => {
   popupWithImage.open(data);
 }
+const popupWithConfirmation = new PopupWithConfirmation('.popup_purpose_confirm-delete');
+popupWithConfirmation.setEventListeners();
 
-const popupWithConfirmation = new PopupWithConfirmation(
-  '.popup_purpose_confirm-delete', {
-    handleFormSubmit: (data, card) => {
-      api.deleteCard(data._id)
-        .then(() => {
-          card.deleteCardOnPage();
-      });
-      popupWithConfirmation.close();
+const popupAddCard = new PopupWithForm(
+  '.popup_purpose_add-card', {
+  handleFormSubmit: (inputsData) => {
+    api.createCard(inputsData)
+      .then((card) => {
+        const newCard = createNewCard({ cardData: card });
+        cardList.addItem(newCard);
+        popupAddCard.close();
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        cardAddPopupFormValidator.changeButtonOnSaveChanges();
+      })
+  }
+}, {
+  setSubmitButtonValue: () => {
+    cardAddPopupFormValidator.setDefaultSubmitButtonValue();
     }
   }
 );
+popupAddCard.setEventListeners();
+const hadleOpenCardAddPopup = () => {
+  popupAddCard.open();
+  cardAddPopupFormValidator.resetFormCondition();
+}
+cardAddOpenButton.addEventListener('click', () => {
+  hadleOpenCardAddPopup();
+});
+
+// загружаю данные с сервера и завожу в профиль + завожу в юзерайди нужный айди
+api.getUserInfo()
+  .then((user) => {
+    userInfo.setUserInfo({ credentials: user.name, description: user.about });
+    userInfo.setUserAvatar({ link: user.avatar });
+    userId = user._id;
+    api.getCardList()
+      .then((cards) => {
+        cardList.renderItems(cards);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 // прописываю универсальную функцию создания карточки
-const createNewCard = ({ cardData, userInfo }) => {
-  const card = new Card({ cardData }, handleCardClick, '#cards-template', userInfo,
+const createNewCard = ({ cardData }) => {
+  const card = new Card({ cardData }, handleCardClick, '#cards-template', userId,
   {
+    // при нажатии на корзину из класса карт возьмутся данные - data = this.cardData, card = this
     handleDeleteCard: (data, card) => {
-      popupWithConfirmation.setEventListeners(data, card);
       popupWithConfirmation.open();
+      // через метод класса записываю в колбэк, что произойдет при сабмите
+      popupWithConfirmation.handleDeleteConfirm({
+        handleFormSubmit: () => {
+          api.deleteCard(data._id)
+          .then(() => {
+            card.deleteCardOnPage();
+          })
+          .then(() => {
+            popupWithConfirmation.close();
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        }
+      });
     }
   },
   {
     handleLikeCard: (data) => {
-      card.likeCard();
       if (card.isLiked) {
         api.deleteLike(data._id)
           .then((data) => {
             card.isLiked = false;
             card.setLikesNumber(data.likes.length);
+            card.likeCard();
           })
           .catch((err) => {
             console.log(err);
@@ -88,6 +155,7 @@ const createNewCard = ({ cardData, userInfo }) => {
           .then((data) => {
             card.isLiked = true;
             card.setLikesNumber(data.likes.length);
+            card.likeCard();
           })
           .catch((err) => {
             console.log(err);
@@ -96,79 +164,14 @@ const createNewCard = ({ cardData, userInfo }) => {
     }
   }
 );
-  return card;
+  const newCard = card.generateCard();
+  return newCard;
 }
 
-// загружаю данные с сервера и завожу в профиль
-// загружаю инфу - создаю секции тут, чтобы передать юзера в кард
-api.getUserInfo()
-  .then((user) => {
-    userInfo.setUserInfo({ credentials: user.name, description: user.about });
-    userInfo.setUserAvatar({ link: user.avatar });
-
-      // отрисовка карточек с сервера
-    const cardList = new Section({
-      renderer: (item) => {
-        const initialCard = createNewCard({ cardData: item, userInfo: user });
-        const cardElement = initialCard.generateCard();
-        cardList.addItem(cardElement);
-      }
-    }, '.gallery');
-    api.getCardList()
-      .then((cards) => {
-        cardList.renderItems(cards);
-      });
-
-      // отрисовка карточек от юзера
-    const userCard = new Section({
-      renderer: (item) => {
-        const newCard = createNewCard({ cardData: item, userInfo: user });
-        const cardElement = newCard.generateCard();
-        userCard.addItem(cardElement);
-        }
-      }, '.gallery');
-      //userCard создан выше - поэтому попап создаю тут
-      const popupAddCard = new PopupWithForm(
-        '.popup_purpose_add-card', {
-        handleFormSubmit: (inputsData) => {
-          cardAddPopupFormValidator.changeButtonOnSaveChanges();
-          const userItems = [];
-          api.createCard(inputsData)
-            .then((card) => {
-              userItems.push(card);
-              userCard.renderItems(userItems);
-              popupAddCard.close();
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        }
-      }, {
-        setSubmitButtonValue: () => {
-          cardAddPopupFormValidator.setDefaultSubmitButtonValue();
-          }
-        }
-      );
-      popupAddCard.setEventListeners();
-
-      const hadleOpenCardAddPopup = () => {
-        popupAddCard.open();
-        cardAddPopupFormValidator.resetFormCondition();
-      }
-      cardAddOpenButton.addEventListener('click', () => {
-        hadleOpenCardAddPopup();
-      });
-  })
-  .catch((err) => {
-    console.log(err);
-  });
-
-
-// изменение данных профиля
+// функционал изменения данных профиля
 const popupEditProfile = new PopupWithForm(
   '.popup_purpose_edit-profile', {
   handleFormSubmit: (inputsData) => {
-    profileEditFormfValidator.changeButtonOnSaveChanges();
     api.editUserInfo({ name: inputsData.credentials, about: inputsData.description })
       .then(({ name, about }) => {
         userInfo.setUserInfo({ credentials: name, description: about });
@@ -176,6 +179,9 @@ const popupEditProfile = new PopupWithForm(
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        profileEditFormfValidator.changeButtonOnSaveChanges();
       });
     }
   }, {
@@ -185,7 +191,6 @@ const popupEditProfile = new PopupWithForm(
   }
 );
 popupEditProfile.setEventListeners();
-
 const hadleOpenEditPopup = () => {
   popupEditProfile.open();
   profileEditFormfValidator.resetFormCondition();
@@ -200,7 +205,6 @@ profileEditPopupOpenButton.addEventListener('click', () => {
 // блок редактирования аватарки
 const avatarChangePopup = new PopupWithForm('.popup_purpose_change-avatar', {
   handleFormSubmit: (inputData) => {
-    avatarChangePopupValidator.changeButtonOnSaveChanges();
     api.changeAvatar({ avatar: inputData.link })
       .then(({ avatar }) => {
         userInfo.setUserAvatar({ link: avatar });
@@ -208,7 +212,10 @@ const avatarChangePopup = new PopupWithForm('.popup_purpose_change-avatar', {
       })
       .catch((err) => {
         console.log(err);
-      });
+      })
+      .finally(() => {
+        avatarChangePopupValidator.changeButtonOnSaveChanges();
+      })
   }
 }, {
   setSubmitButtonValue: () => {
@@ -217,7 +224,6 @@ const avatarChangePopup = new PopupWithForm('.popup_purpose_change-avatar', {
   }
 );
 avatarChangePopup.setEventListeners();
-
 const hadleOpenAvatarChangePopup = () => {
   avatarChangePopup.open();
   avatarChangePopupValidator.resetFormCondition();
